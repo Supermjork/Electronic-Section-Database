@@ -73,4 +73,4 @@ CREATE TABLE orders1(order_id INTEGER NOT NULL,
 CREATE TABLE issueorder(order_id INTEGER NOT NULL,
                         inventory_id VARCHAR(255) NOT NULL,
                         seller_id INTEGER NOT NULL,
-                        customer_id INTEGER NOT NULL);
+                        customer_id INTEGER);
