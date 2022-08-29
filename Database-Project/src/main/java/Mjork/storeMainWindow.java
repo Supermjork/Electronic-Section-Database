@@ -125,7 +125,7 @@ public class storeMainWindow extends JPanel {
     public static void main(String[] args) {
         // main method is needed to first instantiate the main window, rest follows through dispose and instantiation
         // !disabled for the purpose of testing connection!
-        //new storeMainWindow();
+        new storeMainWindow();
 
         // Write code to establish db connection here, (after merging with main i.e. after addition of JDBC jar)
         // Need to instantiate a Connection object, then store URL, Username, Password in variables (Security flaw).
@@ -133,9 +133,9 @@ public class storeMainWindow extends JPanel {
 
         // url format: "jdbc:<db-type*>://<hostname>:<port>/<db-name>
         // db-type*: full name for database type as postgresql, etc.
-        String dbURL    = "";
-        String username = "";
-        String password = "";
+        String dbURL    = "jdbc:postgresql://localhost:42069/storetestdb";
+        String username = "postgres";
+        String password = "moork1234";
 
         try {
             connection = DriverManager.getConnection(dbURL, username, password);

@@ -3,6 +3,7 @@ package Mjork;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.*;
 
 /**
  * Customer-only window made to register onto the database, Admins will be hardcoded,
@@ -117,6 +118,18 @@ public class storeRegisterWindow extends JPanel {
 
                 // Try-catch block for db insertion, if successful JOption pane for Success, changes windows,
                 // if unsuccessful, JOption pane for failure, stays on window.
+
+                try {
+                    Statement sqlCommand = storeMainWindow.glob_connect.createStatement();
+                    sqlCommand.executeUpdate("INSERT INTO customer VALUES (DEFAULT, '" + username + "', '"
+                                             + userPass + "', '" + userAddress_city + "', '"
+                                             +  userAddress_district + "', '" + userAddress_zipcode + "')");
+
+
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                    JOptionPane.showMessageDialog(registration, "Unsuccessful Registration");
+                }
             }
         });
     }
