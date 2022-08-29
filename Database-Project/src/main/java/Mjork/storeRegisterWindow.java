@@ -125,9 +125,11 @@ public class storeRegisterWindow extends JPanel {
                                              + userPass + "', '" + userAddress_city + "', '"
                                              +  userAddress_district + "', '" + userAddress_zipcode + "')");
 
-
+                    JOptionPane.showMessageDialog(registration, "Successful Registration");
+                    registration.dispose();
+                    new storeMainWindow();
                 } catch (SQLException ex) {
-                    System.out.println(ex);
+                    System.out.println("Registration Error:\n" +ex);
                     JOptionPane.showMessageDialog(registration, "Unsuccessful Registration");
                 }
             }
