@@ -105,7 +105,8 @@ public class storeRegisterWindow extends JPanel {
         registerButton.addActionListener(e -> {
             // Code to first check nullity of the data fields (No field is empty (grab from my library project)),
             // after checking, the pulled data will be put into an SQL INSERT INTO method
-            // and pushed into the "customers" table (after successful insertion, auto swap windows to main).
+            // and pushed into the "customers" table (after successful insertion, auto swap windows to main)
+            // of course after checking that the user does not already exist.
             if(usernameIn.getText().equals("") || passwordIn.getText().equals("") || address_cityIn.getText().equals("") || address_districtIn.getText().equals("") || address_zipcodeIn.getText().equals("")) {
                 JOptionPane.showMessageDialog(registration, "Please fill in the fields");
             } else {
@@ -116,18 +117,27 @@ public class storeRegisterWindow extends JPanel {
                 String userAddress_district = address_districtIn.getText();
                 String userAddress_zipcode = address_zipcodeIn.getText();
 
-                // Try-catch block for db insertion, if successful JOption pane for Success, changes windows,
-                // if unsuccessful, JOption pane for failure, stays on window.
+                // [Done]Try-catch block for db insertion, if successful JOption pane for Success, changes windows,
+                //       if unsuccessful, JOption pane for failure, stays on window.
 
                 try {
-                    Statement sqlCommand = storeMainWindow.glob_connect.createStatement();
-                    sqlCommand.executeUpdate("INSERT INTO customer VALUES (DEFAULT, '" + username + "', '"
-                                             + userPass + "', '" + userAddress_city + "', '"
-                                             +  userAddress_district + "', '" + userAddress_zipcode + "')");
+                    PreparedStatement checkExist = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM customer WHERE username = '" + username + "'");
+                    ResultSet resSet = checkExist.executeQuery();
 
-                    JOptionPane.showMessageDialog(registration, "Successful Registration");
-                    registration.dispose();
-                    new storeMainWindow();
+                    if(resSet.isBeforeFirst()) {
+                        System.out.println("Error signing up: Username already exists.");
+                        JOptionPane.showMessageDialog(registration, "Username already exists, Select another username.");
+                    } else {
+                        PreparedStatement insertUser = storeMainWindow.glob_connect.prepareStatement(
+                                "INSERT INTO customer VALUES (DEFAULT, '" + username + "','"
+                                + userPass + "','" + userAddress_city + "','" + userAddress_district + "','"
+                                + userAddress_zipcode + "')");
+                        insertUser.executeUpdate();
+
+                        JOptionPane.showMessageDialog(registration, "Successful Registration");
+                        registration.dispose();
+                        new storeMainWindow();
+                    }
                 } catch (SQLException ex) {
                     System.out.println("Registration Error:\n" +ex);
                     JOptionPane.showMessageDialog(registration, "Unsuccessful Registration");

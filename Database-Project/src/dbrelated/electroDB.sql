@@ -1,14 +1,14 @@
 CREATE TABLE seller(seller_id SERIAL PRIMARY KEY,
-                    seller_name VARCHAR(255) NOT NULL,
+                    seller_name VARCHAR(255) NOT NULL UNIQUE,
                     seller_password VARCHAR(255) NOT NULL);
 
 --Might hardcode admin stuff
 CREATE TABLE systemAdmin(system_id INTEGER PRIMARY KEY,
-                         adminName VARCHAR(255) NOT NULL,
+                         adminName VARCHAR(255) NOT NULL UNIQUE,
                          admin_Password VARCHAR(255) NOT NULL);
 
 CREATE TABLE customer(user_id SERIAL PRIMARY KEY,
-                      username VARCHAR(255) NOT NULL ,
+                      username VARCHAR(255) NOT NULL UNIQUE,
                       customer_password VARCHAR(255) NOT NULL ,
                       address_city VARCHAR(255) NOT NULL ,
                       address_district VARCHAR(255) NOT NULL ,
