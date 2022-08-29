@@ -2,6 +2,8 @@ package Mjork;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  * This class will be used to create the main window to login/register on the Electronics Store,
@@ -118,8 +120,28 @@ public class storeMainWindow extends JPanel {
 
     public static void main( String[] args ) {
         // main method is needed to first instantiate the main window, rest follows through dispose and instantiation
-        new storeMainWindow();
+        // !disabled for the purpose of testing connection!
+        //new storeMainWindow();
 
         // Write code to establish db connection here, (after merging with main i.e. after addition of JDBC jar)
+        // Need to instantiate a Connection object, then store URL, Username, Password in variables (Security flaw).
+        Connection connection;
+
+        // url format: "jdbc:<db-type*>://<hostname>:<port>/<db-name>
+        // db-type*: full name for database type as postgresql, etc.
+        String dbURL    = "";
+        String username = "";
+        String password = "";
+
+        try {
+            connection = DriverManager.getConnection(dbURL, username, password);
+            if(connection != null) {
+                System.out.println("Connection Established.");
+            } else {
+                System.out.println("Connection Failed.");
+            }
+        } catch (Exception e) {
+            System.out.println("Connection Failed due to:\n" + e);
+        }
     }
 }
