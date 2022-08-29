@@ -25,7 +25,13 @@ CREATE TABLE handheld(inventory_id VARCHAR(255) DEFAULT 'hand-'||nextval('hand_s
                       reviewrating NUMERIC(2, 1) NOT NULL,
                       devicetype VARCHAR(255) NOT NULL,
                       screensize NUMERIC(5,2) NOT NULL,
-                      devicestorage INTEGER NOT NULL);
+                      devicestorage INTEGER NOT NULL,
+                      approvalstatus VARCHAR(8),
+                      approvedby INTEGER,
+                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
+
+CREATE INDEX handheld_approval ON handheld(approvalstatus);
+CREATE TEMP VIEW available_handheld AS SELECT devicename, brand, price, reviewrating, devicetype, screensize, devicestorage FROM handheld WHERE approvalstatus = 'approved';
 
 CREATE SEQUENCE cam_seq START WITH 1;
 
@@ -35,7 +41,13 @@ CREATE TABLE camera(inventory_id VARCHAR(255) DEFAULT 'cam-'||nextval('cam_seq':
                     price NUMERIC(10, 2) NOT NULL,
                     reviewRating NUMERIC(2, 1) NOT NULL,
                     focallength NUMERIC(4,2) NOT NULL,
-                    cameratype VARCHAR(255) NOT NULL);
+                    cameratype VARCHAR(255) NOT NULL,
+                    approvalstatus VARCHAR(8),
+                    approvedby INTEGER,
+                    CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
+
+CREATE INDEX camera_approval ON camera(approvalstatus);
+CREATE TEMP VIEW available_camera AS SELECT devicename, brand, price, reviewRating, focallength, cameratype FROM camera WHERE approvalstatus = 'approved';
 
 CREATE SEQUENCE comp_seq START WITH 1;
 
@@ -49,10 +61,20 @@ CREATE TABLE computer(inventory_id VARCHAR(255) DEFAULT 'comp-'||nextval('comp_s
                       operatingsys VARCHAR(255) NOT NULL,
                       ram INTEGER NOT NULL,
                       devicestorage INTEGER NOT NULL,
-                      devicetype VARCHAR(255) NOT NULL);
+                      devicetype VARCHAR(255) NOT NULL,
+                      approvalstatus VARCHAR(8),
+                      approvedby INTEGER,
+                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
 
---admin_id is null for when a new listing is created, it can be displayed and after review
---the id will be put and no longed display for we will do SELECT * lists WHERE ad_id=null
+CREATE INDEX computer_approval ON computer(approvalstatus);
+CREATE TEMP VIEW available_computer AS SELECT devicename, brand, reviewrating, price, cpu, gpu, operatingsys, ram, devicestorage, devicetype FROM computer WHERE approvalstatus = 'approved';
+
+/*
+CURRENT IDEA: Index the device tables by creating a status attribute taking "approved" or null
+              instead of using a buffer table (more coding :c ), also create a view.
+
+admin_id is null for when a new listing is created, it can be displayed and after review
+the id will be put and no longed display for we will do SELECT * lists WHERE ad_id=null
 CREATE TABLE lists(inventory_id VARCHAR(255) PRIMARY KEY,
                    seller_id INTEGER NOT NULL,
                    admin_id INTEGER,
@@ -60,6 +82,7 @@ CREATE TABLE lists(inventory_id VARCHAR(255) PRIMARY KEY,
                    CONSTRAINT fk2_1 FOREIGN KEY (inventory_id) REFERENCES handheld(inventory_id),
                    CONSTRAINT fk2_2 FOREIGN KEY (inventory_id) REFERENCES computer(inventory_id),
                    CONSTRAINT fk2_3 FOREIGN KEY (inventory_id) REFERENCES camera(inventory_id));
+*/
 
 --Issued orders get put into orders1, under the same serialised order_ID
 --seller_id can be traced through the item's ID in the "lists" table
