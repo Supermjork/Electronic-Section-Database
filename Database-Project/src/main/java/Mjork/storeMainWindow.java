@@ -115,7 +115,8 @@ public class storeMainWindow extends JPanel {
 
         // [ ]Code to check which user type (Customer, Seller, Admin) is logging in goes here,
         //   still don't know how it will know which table to search through, maybe radio button to indicate?
-        //   after successful login, dispose of current window and instantiate a window object of
+        //   after successful login, dispose (maybe not, to save the connection object) of current window
+        //   and instantiate a window object of
         //   the respective user type (new {AdminWindow, CustomerWindow, SellerWindow})
         // [ ]Also need to add a registration window, for customers only, i.e. output goes into customers' table
         // [ ]Dunno where to put the connection, if it's only on this window or do we connect on each window?
