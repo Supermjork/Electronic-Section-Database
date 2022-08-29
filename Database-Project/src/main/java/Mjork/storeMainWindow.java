@@ -15,7 +15,10 @@ import java.sql.DriverManager;
  */
 
 public class storeMainWindow extends JPanel {
-    // First step is to write the components of the window in its constructor
+    // Defining database connection as global variable for later use
+    protected static Connection glob_connect;
+
+    // Writing the components of the window in its constructor
     public storeMainWindow() {
         // Creating frame to hold the components
         JFrame login = new JFrame("Store Login Window");
@@ -118,7 +121,7 @@ public class storeMainWindow extends JPanel {
         // [ ]Dunno where to put the connection, if it's only on this window or do we connect on each window?
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         // main method is needed to first instantiate the main window, rest follows through dispose and instantiation
         // !disabled for the purpose of testing connection!
         //new storeMainWindow();
@@ -137,6 +140,7 @@ public class storeMainWindow extends JPanel {
             connection = DriverManager.getConnection(dbURL, username, password);
             if(connection != null) {
                 System.out.println("Connection Established.");
+                glob_connect = connection;
             } else {
                 System.out.println("Connection Failed.");
             }
