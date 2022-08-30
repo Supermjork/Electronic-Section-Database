@@ -3,6 +3,8 @@ package Mjork;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Seller window will show the seller fields, so they could add an electronic device into the inventory
@@ -43,7 +45,6 @@ public class storeSellerWindow extends JPanel {
         JLabel device_Storage = new JLabel("Storage"); // Common Between Handheld and Computers
             // Device Specific (Camera)
         JLabel camera_FocLen = new JLabel("Camera Focal Length");
-        JLabel camera_Lens = new JLabel("Camera Lens Size");
             // Device Specific (Handheld)
         JLabel handheld_screen = new JLabel("Handheld Screen");
             // Device Specific (Computers)
@@ -61,7 +62,6 @@ public class storeSellerWindow extends JPanel {
 
             // Device Specific Fields (Camera)
         JTextField focLenIn = new JTextField();
-        JTextField lensIn = new JTextField();
 
             // Device Specific Fields (Handheld)
         JTextField screenIn = new JTextField();
@@ -90,8 +90,6 @@ public class storeSellerWindow extends JPanel {
 
         camera_FocLen.setBounds(10, 210, 120, 30);
         focLenIn.setBounds(160, 210, 120, 30);
-        camera_Lens.setBounds(310, 210, 120, 30);
-        lensIn.setBounds(450, 210, 120, 30);
 
         handheld_screen.setBounds(10, 250, 120, 30);
         screenIn.setBounds(160, 250, 120, 30);
@@ -135,9 +133,6 @@ public class storeSellerWindow extends JPanel {
         UI_seller.add(camera_FocLen);
         UI_seller.add(focLenIn);
 
-        UI_seller.add(camera_Lens);
-        UI_seller.add(lensIn);
-
             // Handheld
         UI_seller.add(handheld_screen);
         UI_seller.add(screenIn);
@@ -178,6 +173,38 @@ public class storeSellerWindow extends JPanel {
         exitSession.addActionListener(e -> {
             UI_seller.dispose();
             new storeMainWindow();
+        });
+
+        deviceAdd.addActionListener(e -> {
+            // For all insert queries "INSERT INTO  VALUES (Default, dev_name, dev_brand, dev_review ,dev_price, ...)
+            if(!(nameIn.toString().equals("") || brandIn.toString().equals("") || priceIn.toString().equals("") || typeIn.toString().equals("") || storageIn.toString().equals(""))) {
+                String dev_name   = nameIn.getText();
+                String dev_brand  = brandIn.getText();
+                String dev_price  = priceIn.getText();
+                String dev_type   = typeIn.getText();
+                String dev_storage= storageIn.getText();
+                int dev_review    = 2;
+
+                if(isCamera.isSelected()) {
+                    if(!focLenIn.toString().equals("")) {
+                        try {
+                            PreparedStatement camInsert = storeMainWindow.glob_connect.prepareStatement("INSERT INTO camera VALUES (DEFAULT, '" +
+                                                          dev_name + "', '" + dev_brand + "', " + dev_price + ", " + dev_review + ", " +
+                                                          focLenIn.getText() + ", '" + dev_type + "', " + storeMainWindow.user_id
+                                                          + ", FALSE, NULL);");
+                            camInsert.executeUpdate();
+
+                            JOptionPane.showMessageDialog(UI_seller, "Camera successfully added.");
+                        } catch (SQLException ex) {
+                            System.out.println("Error whilst adding camera:\n" + ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(UI_seller, "Enter camera info");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(UI_seller, "Please fill in the basic information.");
+            }
         });
     }
 }
