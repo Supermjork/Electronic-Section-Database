@@ -44,7 +44,6 @@ public class storeCustomerWindow extends JPanel {
 
         orderDeviceButton.setBounds(549, 230, 175, 30);
         orderDeviceField.setBounds(549, 290, 175, 30);
-
         exitSession.setBounds(750 / 3, (3 * 750) / 4, 750 / 3, 70);
 
             // Adding elements to Frame
@@ -55,7 +54,6 @@ public class storeCustomerWindow extends JPanel {
         UI_customer.add(orderDeviceField);
 
         UI_customer.add(displayContainer);
-        UI_customer.add(displayDevices);
 
         UI_customer.add(exitSession);
 

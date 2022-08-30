@@ -207,7 +207,7 @@ public class storeSellerWindow extends JPanel {
                             PreparedStatement handHeldInsert = storeMainWindow.glob_connect.prepareStatement("INSERT INTO handheld VALUES (DEFAULT, '" +
                                                                dev_name + "', '" + dev_brand + "', " + dev_price + ", " + dev_review + ", '" + dev_type +
                                                                "', " + screenIn.getText() + ", " + dev_storage + ", " +
-                                                               storeMainWindow.user_id + ", FALSE, NULL;");
+                                                               storeMainWindow.user_id + ", FALSE, NULL);");
                             handHeldInsert.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_seller, "Handheld device successfully added.");
@@ -223,8 +223,8 @@ public class storeSellerWindow extends JPanel {
                             PreparedStatement computerInsert = storeMainWindow.glob_connect.prepareStatement(
                                     "INSERT INTO computer VALUES (DEFAULT, '" + dev_name + "', '" + dev_brand + "', "
                                     + dev_review + ", " + dev_price + ", '" + cpuIn.getText() + "', '" + gpuIn.getText() + "', '"
-                                    + opSysIn.getText() + "', '" + ramIn.getText() + "', " + dev_storage + ", " + dev_type + ", '"
-                                    + storeMainWindow.user_id + "', FALSE, NULL;");
+                                    + opSysIn.getText() + "', '" + ramIn.getText() + "', " + dev_storage + ", '" + dev_type + "', "
+                                    + storeMainWindow.user_id + ", FALSE, NULL);");
                             computerInsert.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_seller, "Computer added successfully.");

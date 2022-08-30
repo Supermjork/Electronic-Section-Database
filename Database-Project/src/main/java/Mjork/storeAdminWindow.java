@@ -43,8 +43,8 @@ public class storeAdminWindow extends JPanel {
         displayContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
             // Setting boundaries
-        displayContainer.setBounds(10, 10, 715, 200);
-        displayDevices.setBounds(10, 10, 715, 200);
+        displayContainer.setBounds(10, 10, 725, 200);
+        displayDevices.setBounds(10, 10, 725, 200);
 
         button_Approval.setBounds(155, 290, 150, 30);
         tField_approve.setBounds(155, 230, 150, 30);
@@ -54,12 +54,11 @@ public class storeAdminWindow extends JPanel {
         tField_Unapproved.setBounds(520, 230, 175, 30);
         label_Unapproved.setBounds(375, 230, 145, 30);
 
-        button_refresh.setBounds(750 / 3, 500 / 2, 750 / 3, 30);
-        exitSession.setBounds(750 / 3, (3 * 500) / 4, 750 / 3, 30);
+        button_refresh.setBounds(375, (3 * 500) / 4, 750 / 3, 30);
+        exitSession.setBounds(10, (3 * 500) / 4, 750 / 3, 30);
 
             // Adding components to frame
         UI_admin.add(displayContainer);
-        UI_admin.add(displayDevices);
 
         UI_admin.add(button_Approval);
         UI_admin.add(label_Approved);
@@ -173,7 +172,7 @@ public class storeAdminWindow extends JPanel {
 
                 if(approved_ID.charAt(0) == 'h') {
                     try {
-                        PreparedStatement handHeld_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE handheld SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = " + approved_ID + ";");
+                        PreparedStatement handHeld_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE handheld SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = '" + approved_ID + "';");
                         handHeld_approve.executeUpdate();
 
                         JOptionPane.showMessageDialog(UI_admin, "Successfully approved handheld.");
@@ -183,7 +182,7 @@ public class storeAdminWindow extends JPanel {
                 } else if(approved_ID.charAt(0) == 'c') {
                     if(approved_ID.charAt(1) == 'a') {
                         try {
-                            PreparedStatement camera_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE camera SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = " + approved_ID + ";");
+                            PreparedStatement camera_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE camera SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = '" + approved_ID + "';");
                             camera_approve.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_admin, "Successfully approved camera.");
@@ -192,7 +191,7 @@ public class storeAdminWindow extends JPanel {
                         }
                     } else if(approved_ID.charAt(1) == 'o') {
                         try {
-                            PreparedStatement computer_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE computer SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = " + approved_ID + ";");
+                            PreparedStatement computer_approve = storeMainWindow.glob_connect.prepareStatement("UPDATE computer SET approvalstatus = TRUE, approvedby = " + storeMainWindow.user_id + " WHERE inventory_id = '" + approved_ID + "';");
                             computer_approve.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_admin, "Successfully approved computer");
@@ -214,7 +213,7 @@ public class storeAdminWindow extends JPanel {
 
                 if(unapproved_ID.charAt(0) == 'h') {
                     try {
-                        PreparedStatement handHeld_Terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM handheld WHERE inventory_id = " + unapproved_ID + ";");
+                        PreparedStatement handHeld_Terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM handheld WHERE inventory_id = '" + unapproved_ID + "';");
                         handHeld_Terminate.executeUpdate();
 
                         JOptionPane.showMessageDialog(UI_admin, "Successfully terminated handheld.");
@@ -224,7 +223,7 @@ public class storeAdminWindow extends JPanel {
                 } else if(unapproved_ID.charAt(0) == 'c') {
                     if(unapproved_ID.charAt(1) == 'a') {
                         try {
-                            PreparedStatement camera_terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM camera WHERE inventory_id = " + unapproved_ID + ";");
+                            PreparedStatement camera_terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM camera WHERE inventory_id = '" + unapproved_ID + "';");
                             camera_terminate.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_admin, "Successfully terminated camera.");
@@ -233,7 +232,7 @@ public class storeAdminWindow extends JPanel {
                         }
                     } else if(unapproved_ID.charAt(1) == 'o') {
                         try {
-                            PreparedStatement computer_terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM computer WHERE inventory_id = " + unapproved_ID + ";");
+                            PreparedStatement computer_terminate = storeMainWindow.glob_connect.prepareStatement("DELETE FROM computer WHERE inventory_id = '" + unapproved_ID + "';");
                             computer_terminate.executeUpdate();
 
                             JOptionPane.showMessageDialog(UI_admin, "Successfully terminated computer");
