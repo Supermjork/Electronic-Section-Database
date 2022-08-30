@@ -201,6 +201,39 @@ public class storeSellerWindow extends JPanel {
                     } else {
                         JOptionPane.showMessageDialog(UI_seller, "Enter camera info");
                     }
+                } else if(isHandheld.isSelected()) {
+                    if(!(screenIn.toString().equals("") || storageIn.toString().equals(""))) {
+                        try {
+                            PreparedStatement handHeldInsert = storeMainWindow.glob_connect.prepareStatement("INSERT INTO handheld VALUES (DEFAULT, '" +
+                                                               dev_name + "', '" + dev_brand + "', " + dev_price + ", " + dev_review + ", '" + dev_type +
+                                                               "', " + screenIn.getText() + ", " + dev_storage + ", " +
+                                                               storeMainWindow.user_id + ", FALSE, NULL;");
+                            handHeldInsert.executeUpdate();
+
+                            JOptionPane.showMessageDialog(UI_seller, "Handheld device successfully added.");
+                        } catch (SQLException ex) {
+                            System.out.println("Error whilst adding Handheld: \n" + ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(UI_seller, "Enter Handheld information");
+                    }
+                } else if(isComputer.isSelected()) {
+                    if(!(cpuIn.toString().equals("") || gpuIn.toString().equals("") || opSysIn.toString().equals("") || ramIn.toString().equals("") || storageIn.toString().equals("")))  {
+                        try {
+                            PreparedStatement computerInsert = storeMainWindow.glob_connect.prepareStatement(
+                                    "INSERT INTO computer VALUES (DEFAULT, '" + dev_name + "', '" + dev_brand + "', "
+                                    + dev_review + ", " + dev_price + ", '" + cpuIn.getText() + "', '" + gpuIn.getText() + "', '"
+                                    + opSysIn.getText() + "', '" + ramIn.getText() + "', " + dev_storage + ", " + dev_type + ", '"
+                                    + storeMainWindow.user_id + "', FALSE, NULL;");
+                            computerInsert.executeUpdate();
+
+                            JOptionPane.showMessageDialog(UI_seller, "Computer added successfully.");
+                        } catch (SQLException ex) {
+                            System.out.println("Error whilst adding computer: \n" + ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(UI_seller, "Complete computer information");
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(UI_seller, "Please fill in the basic information.");

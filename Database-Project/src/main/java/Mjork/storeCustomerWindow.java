@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Customer window will show the customer their search results, may display inventory items randomly(?)
@@ -79,9 +78,9 @@ public class storeCustomerWindow extends JPanel {
                 String searchResFin;
 
                 try {
-                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
 
                     ResultSet resultSetHand = checkExistHand.executeQuery();
                     ResultSet resultSetComp = checkExistComp.executeQuery();
@@ -94,7 +93,12 @@ public class storeCustomerWindow extends JPanel {
                         for(int i = 1; i <= currentRow.length; i++) {
                             currentRow[i - 1] = resultSetHand.getString(i);
                         }
-                        searchResBuild.append(Arrays.toString(currentRow)).append("\n");
+                        searchResBuild.append("Item ID: ").append(currentRow[0]).append("\n").append("Item Name: ")
+                                .append(currentRow[1]).append("\n").append("Item Brand: ").append(currentRow[2]).append("\n")
+                                .append("Item Price: ").append(currentRow[3]).append("\n").append("Review Rating: ").append(currentRow[4])
+                                .append("\n").append("Handheld Type: ").append(currentRow[5]).append("\n")
+                                .append("Screen size: ").append(currentRow[6]).append("\n").append("Storage: ").append(currentRow[7])
+                                .append("\n\n");
                     }
 
                     while(resultSetComp.next()) {
@@ -102,7 +106,13 @@ public class storeCustomerWindow extends JPanel {
                         for(int i = 1; i <= currentRow.length; i++) {
                             currentRow[i - 1] = resultSetComp.getString(i);
                         }
-                        searchResBuild.append(Arrays.toString(currentRow)).append("\n");
+                        searchResBuild.append("Item ID: ").append(currentRow[0]).append("\n").append("Item Name: ")
+                                .append(currentRow[1]).append("\n").append("Item Brand: ").append(currentRow[2]).append("\n")
+                                .append("Item Price: ").append(currentRow[4]).append("\n").append("Review Rating: ").append(currentRow[3]).append("\n")
+                                .append("CPU: ").append(currentRow[5]).append("\n").append("GPU: ").append(currentRow[6]).append("\n")
+                                .append("Operating System: ").append(currentRow[7]).append("\n").append("RAM (GB): ").append(currentRow[8])
+                                .append("\n").append("Storage: ").append(currentRow[9]).append("\n").append("Type: ").append(currentRow[10])
+                                .append("\n\n");
                     }
 
                     while(resultSetCam.next()) {
@@ -110,7 +120,11 @@ public class storeCustomerWindow extends JPanel {
                         for(int i = 1; i <= currentRow.length; i++) {
                             currentRow[i - 1] = resultSetCam.getString(i);
                         }
-                        searchResBuild.append(Arrays.toString(currentRow)).append("\n");
+                        searchResBuild.append("Item ID: ").append(currentRow[0]).append("\n").append("Item Name: ")
+                                .append(currentRow[1]).append("\n").append("Item Brand: ").append(currentRow[2]).append("\n")
+                                .append("Item Price: ").append(currentRow[3]).append("\n").append("Review Rating: ").append(currentRow[4])
+                                .append("\n").append("Focal Length: ").append(currentRow[5]).append("\n")
+                                .append("Camera Type: ").append(currentRow[6]).append("\n\n");
                     }
 
                     System.out.println("String parsing complete.");
@@ -118,7 +132,7 @@ public class storeCustomerWindow extends JPanel {
                     searchResFin = searchResBuild.toString();
 
                     if(!searchResFin.equals("")){
-                        displayDevices.setText(searchResBuild.toString());
+                        displayDevices.setText(searchResFin);
                     } else {
                         JOptionPane.showMessageDialog(UI_customer, "Device not Found");
                     }
