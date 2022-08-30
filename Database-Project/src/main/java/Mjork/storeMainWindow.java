@@ -115,14 +115,13 @@ public class storeMainWindow extends JPanel {
             new storeRegisterWindow();
         });
 
-        // [Partially done (missing windows)]Code to check which user type (Customer, Seller, Admin) is logging in goes here,
-        //   still don't know how it will know which table to search through, maybe radio button to indicate?
-        //   after successful login, dispose (maybe not, to save the connection object) of current window
-        //   and instantiate a window object of
-        //   the respective user type (new {AdminWindow, CustomerWindow, SellerWindow})
+        // [Done]Code to check which user type (Customer, Seller, Admin) is logging in goes here,
+        //       still don't know how it will know which table to search through, maybe radio button to indicate (Yep!)?
+        //       after successful login, dispose (maybe not, to save the connection object) of current window
+        //       and instantiate a window object the respective user type (new {AdminWindow, CustomerWindow, SellerWindow})
         // [Done]Also need to add a registration window, for customers only, i.e. output goes into customers' table
         // [Solved]Dunno where to put the connection, if it's only on this window or do we connect on each window?
-        //         Global variable works.
+        //         => Global variable works.
 
         logInButton.addActionListener(e -> {
             String login_username = usernameIn.getText();

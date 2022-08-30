@@ -78,9 +78,9 @@ public class storeCustomerWindow extends JPanel {
                 String searchResFin;
 
                 try {
-                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '" + searchDeviceStr + "%' OR brand LIKE '" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
 
                     ResultSet resultSetHand = checkExistHand.executeQuery();
                     ResultSet resultSetComp = checkExistComp.executeQuery();
@@ -88,6 +88,7 @@ public class storeCustomerWindow extends JPanel {
 
                     System.out.println("List of Devices retrieved.. Parsing into string to display");
 
+                    // Yes I know, the amount of .append() statements look rubbish, was short on time for deadline
                     while(resultSetHand.next()) {
                         String[] currentRow = new String[8];
                         for(int i = 1; i <= currentRow.length; i++) {
