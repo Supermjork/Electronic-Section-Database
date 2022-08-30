@@ -2,8 +2,7 @@ package Mjork;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 /**
  * This class will be used to create the main window to login/register on the Electronics Store,
@@ -17,6 +16,9 @@ import java.sql.DriverManager;
 public class storeMainWindow extends JPanel {
     // Defining database connection as global variable for later use
     protected static Connection glob_connect;
+
+    // Defining variable to hold the user's ID once logged in
+    protected static int user_id;
 
     // Writing the components of the window in its constructor
     public storeMainWindow() {
@@ -113,19 +115,102 @@ public class storeMainWindow extends JPanel {
             new storeRegisterWindow();
         });
 
-        // [ ]Code to check which user type (Customer, Seller, Admin) is logging in goes here,
-        //   still don't know how it will know which table to search through, maybe radio button to indicate?
-        //   after successful login, dispose (maybe not, to save the connection object) of current window
-        //   and instantiate a window object of
-        //   the respective user type (new {AdminWindow, CustomerWindow, SellerWindow})
-        // [ ]Also need to add a registration window, for customers only, i.e. output goes into customers' table
-        // [ ]Dunno where to put the connection, if it's only on this window or do we connect on each window?
+        // [Done]Code to check which user type (Customer, Seller, Admin) is logging in goes here,
+        //       still don't know how it will know which table to search through, maybe radio button to indicate (Yep!)?
+        //       after successful login, dispose (maybe not, to save the connection object) of current window
+        //       and instantiate a window object the respective user type (new {AdminWindow, CustomerWindow, SellerWindow})
+        // [Done]Also need to add a registration window, for customers only, i.e. output goes into customers' table
+        // [Solved]Dunno where to put the connection, if it's only on this window or do we connect on each window?
+        //         => Global variable works.
+
+        logInButton.addActionListener(e -> {
+            String login_username = usernameIn.getText();
+            String login_password = passwordIn.getText();
+
+            if(!(login_username.equals("") || login_password.equals(""))) {
+                try {
+                    if(isCustomer.isSelected()) {
+                        PreparedStatement checkExist = glob_connect.prepareStatement("SELECT * FROM customer WHERE username = '" + login_username + "'");
+                        ResultSet resSet = checkExist.executeQuery();
+
+                        if(resSet.next()) {
+                            System.out.println("Username Found, Password check to follow. (Customer)");
+
+                            if(resSet.getString("customer_password").equals(login_password)) {
+                                user_id = resSet.getInt("user_id");
+                                System.out.println(user_id); // Checking if it got the right customer
+
+                                // Change windows
+                                login.dispose();
+                                new storeCustomerWindow();
+                            } else {
+                                System.out.println("Password incorrect. (Customer)");
+                                JOptionPane.showMessageDialog(login, "Wrong password.");
+                            }
+                        } else {
+                            System.out.println("User does not exist. (Customer)");
+                            JOptionPane.showMessageDialog(login, "User not found.");
+                        }
+                    } else if(isSeller.isSelected()) {
+                        PreparedStatement checkExist = glob_connect.prepareStatement("SELECT * FROM seller WHERE seller_name = '" + login_username + "'");
+                        ResultSet resSet = checkExist.executeQuery();
+
+                        if(resSet.next()) {
+                            System.out.println("Username found, password check to follow. (Seller)");
+
+                            if(resSet.getString("seller_password").equals(login_password)) {
+                                user_id = resSet.getInt("seller_id");
+                                System.out.println(user_id); // Checking if it got the right seller
+
+                                // Change to seller window
+                                login.dispose();
+                                new storeSellerWindow();
+                            } else {
+                                System.out.println("Password incorrect. (Seller)");
+                                JOptionPane.showMessageDialog(login, "Wrong password.");
+                            }
+                        } else {
+                            System.out.println("User does not exist. (Seller)");
+                            JOptionPane.showMessageDialog(login, "User not found.");
+                        }
+                    } else if(isAdmin.isSelected()) {
+                        PreparedStatement checkExist = glob_connect.prepareStatement("SELECT * FROM systemadmin WHERE adminname = '" + login_username + "'");
+                        ResultSet resultSet = checkExist.executeQuery();
+
+                        if(resultSet.next()) {
+                            System.out.println("Username found, password check to follow. (Admin)");
+
+                            if(resultSet.getString("admin_password").equals(login_password)) {
+                                user_id = resultSet.getInt("system_id");
+                                System.out.println(user_id); // Checking if it got the right admin
+
+                                // Change to admin window
+                                login.dispose();
+                                new storeAdminWindow();
+                            } else {
+                                System.out.println("Password incorrect. (Admin)");
+                                JOptionPane.showMessageDialog(login, "Wrong password.");
+                            }
+                        } else {
+                            System.out.println("User does not exist. (Admin)");
+                            JOptionPane.showMessageDialog(login, "User not found.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(login, "Select your user type.");
+                    }
+                } catch(SQLException sqlException) {
+                    System.out.println("Error whilst trying to login:\n" + sqlException);
+                }
+            } else {
+                JOptionPane.showMessageDialog(login, "Complete your credentials.");
+            }
+        });
     }
 
     public static void main(String[] args) {
         // main method is needed to first instantiate the main window, rest follows through dispose and instantiation
-        // !disabled for the purpose of testing connection!
-        //new storeMainWindow();
+        // !disabled for the purpose of testing connection! <-- Might want to delete later, connection test over, works
+        new storeMainWindow();
 
         // Write code to establish db connection here, (after merging with main i.e. after addition of JDBC jar)
         // Need to instantiate a Connection object, then store URL, Username, Password in variables (Security flaw).
@@ -133,9 +218,9 @@ public class storeMainWindow extends JPanel {
 
         // url format: "jdbc:<db-type*>://<hostname>:<port>/<db-name>
         // db-type*: full name for database type as postgresql, etc.
-        String dbURL    = "";
-        String username = "";
-        String password = "";
+        String dbURL    = "jdbc:postgresql://localhost:42069/storetestdb";
+        String username = "postgres";
+        String password = "moork1234";
 
         try {
             connection = DriverManager.getConnection(dbURL, username, password);
