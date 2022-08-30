@@ -123,3 +123,7 @@ CREATE TABLE orders1(order_id VARCHAR(255) NOT NULL,
                      CONSTRAINT fk3_2 FOREIGN KEY (device_id) REFERENCES computer(inventory_id),
                      CONSTRAINT fk3_3 FOREIGN KEY (device_id) REFERENCES camera(inventory_id),
                      CONSTRAINT pk3 PRIMARY KEY(order_id, device_id));
+
+INSERT INTO seller VALUES (DEFAULT, 'testSeller', 'pwdd');
+INSERT INTO customer VALUES (DEFAULT, 'testUser', 'pwd', 'alex', '1233', '1323');
+INSERT INTO systemAdmin VALUES (44243, 'testAdmin', 'passadmin');

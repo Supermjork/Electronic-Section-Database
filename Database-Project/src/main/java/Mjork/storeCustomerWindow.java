@@ -79,9 +79,9 @@ public class storeCustomerWindow extends JPanel {
                 String searchResFin;
 
                 try {
-                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '%" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '%" + searchDeviceStr + "%'");
-                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistHand = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_handheld WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistComp = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_computer WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
+                    PreparedStatement checkExistCam  = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM available_camera WHERE devicename LIKE '%" + searchDeviceStr + "%' OR brand LIKE '%" + searchDeviceStr + "%'");
 
                     ResultSet resultSetHand = checkExistHand.executeQuery();
                     ResultSet resultSetComp = checkExistComp.executeQuery();
