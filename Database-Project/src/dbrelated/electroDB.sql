@@ -26,12 +26,14 @@ CREATE TABLE handheld(inventory_id VARCHAR(255) DEFAULT 'hand-'||nextval('hand_s
                       devicetype VARCHAR(255) NOT NULL,
                       screensize NUMERIC(5,2) NOT NULL,
                       devicestorage INTEGER NOT NULL,
-                      approvalstatus VARCHAR(8),
+                      listed_by INTEGER NOT NULL,
+                      approvalstatus BOOLEAN,
                       approvedby INTEGER,
-                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
+                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id),
+                      CONSTRAINT fk2 FOREIGN KEY (listed_by) REFERENCES seller(seller_id));
 
 CREATE INDEX handheld_approval ON handheld(approvalstatus);
-CREATE TEMP VIEW available_handheld AS SELECT devicename, brand, price, reviewrating, devicetype, screensize, devicestorage FROM handheld WHERE approvalstatus = 'approved';
+CREATE VIEW available_handheld AS SELECT inventory_id, devicename, brand, price, reviewrating, devicetype, screensize, devicestorage FROM handheld WHERE approvalstatus = TRUE;
 
 CREATE SEQUENCE cam_seq START WITH 1;
 
@@ -42,12 +44,14 @@ CREATE TABLE camera(inventory_id VARCHAR(255) DEFAULT 'cam-'||nextval('cam_seq':
                     reviewRating NUMERIC(2, 1) NOT NULL,
                     focallength NUMERIC(4,2) NOT NULL,
                     cameratype VARCHAR(255) NOT NULL,
-                    approvalstatus VARCHAR(8),
+                    listed_by INTEGER NOT NULL,
+                    approvalstatus BOOLEAN,
                     approvedby INTEGER,
-                    CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
+                    CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id),
+                    CONSTRAINT fk2 FOREIGN KEY (listed_by) REFERENCES seller(seller_id));
 
 CREATE INDEX camera_approval ON camera(approvalstatus);
-CREATE TEMP VIEW available_camera AS SELECT devicename, brand, price, reviewRating, focallength, cameratype FROM camera WHERE approvalstatus = 'approved';
+CREATE VIEW available_camera AS SELECT inventory_id, devicename, brand, price, reviewRating, focallength, cameratype FROM camera WHERE approvalstatus = TRUE;
 
 CREATE SEQUENCE comp_seq START WITH 1;
 
@@ -62,12 +66,14 @@ CREATE TABLE computer(inventory_id VARCHAR(255) DEFAULT 'comp-'||nextval('comp_s
                       ram INTEGER NOT NULL,
                       devicestorage INTEGER NOT NULL,
                       devicetype VARCHAR(255) NOT NULL,
-                      approvalstatus VARCHAR(8),
+                      listed_by INTEGER NOT NULL,
+                      approvalstatus BOOLEAN,
                       approvedby INTEGER,
-                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id));
+                      CONSTRAINT fk FOREIGN KEY (approvedby) REFERENCES systemadmin(system_id),
+                      CONSTRAINT fk2 FOREIGN KEY (listed_by) REFERENCES seller(seller_id));
 
 CREATE INDEX computer_approval ON computer(approvalstatus);
-CREATE TEMP VIEW available_computer AS SELECT devicename, brand, reviewrating, price, cpu, gpu, operatingsys, ram, devicestorage, devicetype FROM computer WHERE approvalstatus = 'approved';
+CREATE VIEW available_computer AS SELECT inventory_id, devicename, brand, reviewrating, price, cpu, gpu, operatingsys, ram, devicestorage, devicetype FROM computer WHERE approvalstatus = TRUE;
 
 /*
 CURRENT IDEA: Index the device tables by creating a status attribute taking "approved" or null

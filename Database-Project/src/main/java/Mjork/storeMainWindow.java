@@ -140,7 +140,10 @@ public class storeMainWindow extends JPanel {
                             if(resSet.getString("customer_password").equals(login_password)) {
                                 user_id = resSet.getInt("user_id");
                                 System.out.println(user_id); // Checking if it got the right customer
+
                                 // Change windows
+                                login.dispose();
+                                new storeCustomerWindow();
                             } else {
                                 System.out.println("Password incorrect. (Customer)");
                                 JOptionPane.showMessageDialog(login, "Wrong password.");
@@ -159,7 +162,10 @@ public class storeMainWindow extends JPanel {
                             if(resSet.getString("seller_password").equals(login_password)) {
                                 user_id = resSet.getInt("seller_id");
                                 System.out.println(user_id); // Checking if it got the right seller
+
                                 // Change to seller window
+                                login.dispose();
+                                new storeSellerWindow();
                             } else {
                                 System.out.println("Password incorrect. (Seller)");
                                 JOptionPane.showMessageDialog(login, "Wrong password.");
@@ -178,7 +184,10 @@ public class storeMainWindow extends JPanel {
                             if(resultSet.getString("admin_password").equals(login_password)) {
                                 user_id = resultSet.getInt("system_id");
                                 System.out.println(user_id); // Checking if it got the right admin
+
                                 // Change to admin window
+                                login.dispose();
+                                new storeAdminWindow();
                             } else {
                                 System.out.println("Password incorrect. (Admin)");
                                 JOptionPane.showMessageDialog(login, "Wrong password.");
@@ -201,7 +210,7 @@ public class storeMainWindow extends JPanel {
 
     public static void main(String[] args) {
         // main method is needed to first instantiate the main window, rest follows through dispose and instantiation
-        // !disabled for the purpose of testing connection!
+        // !disabled for the purpose of testing connection! <-- Might want to delete later, connection test over, works
         new storeMainWindow();
 
         // Write code to establish db connection here, (after merging with main i.e. after addition of JDBC jar)
