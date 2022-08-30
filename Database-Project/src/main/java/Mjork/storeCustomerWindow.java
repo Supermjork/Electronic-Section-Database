@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  * Customer window will show the customer their search results, may display inventory items randomly(?)
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 public class storeCustomerWindow extends JPanel {
     public storeCustomerWindow() {
         // Frame to hold components (As in all other windows)
-        JFrame UI_customer = new JFrame("Customer Window");
+        JFrame customerUI = new JFrame("Customer Window");
 
         // Setting components
             //Buttons for user to search devices, order, and exit
@@ -47,24 +48,24 @@ public class storeCustomerWindow extends JPanel {
         exitSession.setBounds(750 / 3, (3 * 750) / 4, 750 / 3, 70);
 
             // Adding elements to Frame
-        UI_customer.add(searchDeviceButton);
-        UI_customer.add(searchDeviceField);
+        customerUI.add(searchDeviceButton);
+        customerUI.add(searchDeviceField);
 
-        UI_customer.add(orderDeviceButton);
-        UI_customer.add(orderDeviceField);
+        customerUI.add(orderDeviceButton);
+        customerUI.add(orderDeviceField);
 
-        UI_customer.add(displayContainer);
+        customerUI.add(displayContainer);
 
-        UI_customer.add(exitSession);
+        customerUI.add(exitSession);
 
-        UI_customer.setSize(750, 750);
-        UI_customer.setLayout(null);
-        UI_customer.setLocationRelativeTo(null);
-        UI_customer.setVisible(true);
+        customerUI.setSize(750, 750);
+        customerUI.setLayout(null);
+        customerUI.setLocationRelativeTo(null);
+        customerUI.setVisible(true);
 
-        UI_customer.addWindowListener(new WindowAdapter() {
+        customerUI.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                UI_customer.dispose();
+                customerUI.dispose();
             }
         });
 
@@ -133,20 +134,91 @@ public class storeCustomerWindow extends JPanel {
                     if(!searchResFin.equals("")){
                         displayDevices.setText(searchResFin);
                     } else {
-                        JOptionPane.showMessageDialog(UI_customer, "Device not Found");
+                        JOptionPane.showMessageDialog(customerUI, "Device not Found");
                     }
                 } catch (SQLException ex) {
                     System.out.println("Error searching:\n" + ex);
                 }
             } else {
-                JOptionPane.showMessageDialog(UI_customer, "Please insert a device name to search for.");
+                JOptionPane.showMessageDialog(customerUI, "Please insert a device name to search for.");
             }
         });
 
-        orderDeviceButton.addActionListener(e -> {});
+        // Will most likely have it take a single item (Time frame isn't helping)
+        orderDeviceButton.addActionListener(e -> {
+            if(!orderDeviceField.getText().equals("")) {
+                String orderedDeviceID = orderDeviceField.getText();
+                System.out.println(orderedDeviceID); // Testing purpose
+
+                LocalDate date = LocalDate.now();
+                String dateInsert = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+
+                if(orderedDeviceID.charAt(0) == 'h') {
+                    try {
+                        PreparedStatement checkExist = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM handheld WHERE inventory_id = '" + orderedDeviceID + "';");
+                        ResultSet existCheck = checkExist.executeQuery();
+
+                        if(existCheck.next()) {
+                            String orderedDeviceSeller = existCheck.getString("listed_by");
+
+                            PreparedStatement orderStatement = storeMainWindow.glob_connect.prepareStatement("INSERT INTO orders VALUES (DEFAULT, " + storeMainWindow.user_id +", " + orderedDeviceSeller + ", '" + orderedDeviceID + "', '" + dateInsert + "');");
+                            orderStatement.executeUpdate();
+
+                            JOptionPane.showMessageDialog(customerUI, "Order successfully placed for handheld.");
+
+                            // Should include a delete statement after each order but time
+                        } else {
+                            JOptionPane.showMessageDialog(customerUI, "Check the handheld ID you've entered.");
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println("Error adding handheld item to order:\n" + ex);
+                    }
+                } else if(orderedDeviceID.charAt(0) == 'c') {
+                    if(orderedDeviceID.charAt(1) == 'a') {
+                        try {
+                            PreparedStatement checkExist = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM camera WHERE inventory_id = '" + orderedDeviceID + "';");
+                            ResultSet existCheck = checkExist.executeQuery();
+
+                            if(existCheck.next()) {
+                                String orderedDeviceSeller = existCheck.getString("listed_by");
+
+                                PreparedStatement orderStatement = storeMainWindow.glob_connect.prepareStatement("INSERT INTO orders VALUES (DEFAULT, " + storeMainWindow.user_id + ", " + orderedDeviceSeller + ", '" + orderedDeviceID + "', '" + dateInsert + "');" );
+                                orderStatement.executeUpdate();
+
+                                JOptionPane.showMessageDialog(customerUI, "Order placed successfully for camera.");
+                            } else {
+                                JOptionPane.showMessageDialog(customerUI, "Check the camera ID that you've entered.");
+                            }
+                        } catch (SQLException ex) {
+                            System.out.println("Error adding camera to order:\n" + ex);
+                        }
+                    } else if(orderedDeviceID.charAt(1) == 'o') {
+                        try {
+                            PreparedStatement checkExist = storeMainWindow.glob_connect.prepareStatement("SELECT * FROM computer WHERE inventory_id = '" + orderedDeviceID + "';");
+                            ResultSet existCheck = checkExist.executeQuery();
+
+                            if(existCheck.next()) {
+                                String orderedDeviceSeller = existCheck.getString("listed_by");
+
+                                PreparedStatement orderedStatement = storeMainWindow.glob_connect.prepareStatement("INSERT INTO orders VALUES(DEFAULT, " + storeMainWindow.user_id + ", " + orderedDeviceSeller + ", '" + orderedDeviceID + "', '" + dateInsert + "');");
+                                orderedStatement.executeUpdate();
+
+                                JOptionPane.showMessageDialog(customerUI, "Order placed successfully for computer.");
+                            } else {
+                                JOptionPane.showMessageDialog(customerUI, "Check the computer ID that you've entered.");
+                            }
+                        } catch (SQLException ex) {
+                            System.out.println("Error adding computer to order:\n" + ex);
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(customerUI, "Insert an ID to order.");
+            }
+        });
 
         exitSession.addActionListener(e -> {
-            UI_customer.dispose();
+            customerUI.dispose();
             new storeMainWindow();
         });
     }

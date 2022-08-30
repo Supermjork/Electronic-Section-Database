@@ -14,8 +14,8 @@ import java.sql.SQLException;
 public class storeSellerWindow extends JPanel {
     public storeSellerWindow() {
         // Creating Frame
-        JFrame UI_seller = new JFrame("Seller Window");
-        UI_seller.setSize(600, 600);
+        JFrame sellerUI = new JFrame("Seller Window");
+        sellerUI.setSize(600, 600);
 
         // Setting components
             // Radio Button
@@ -118,60 +118,60 @@ public class storeSellerWindow extends JPanel {
 
         // Adding components
             // Common
-        UI_seller.add(device_Name);
-        UI_seller.add(nameIn);
-        UI_seller.add(device_Brand);
-        UI_seller.add(brandIn);
-        UI_seller.add(device_Price);
-        UI_seller.add(priceIn);
-        UI_seller.add(device_Type);
-        UI_seller.add(typeIn);
-        UI_seller.add(device_Storage);
-        UI_seller.add(storageIn);
+        sellerUI.add(device_Name);
+        sellerUI.add(nameIn);
+        sellerUI.add(device_Brand);
+        sellerUI.add(brandIn);
+        sellerUI.add(device_Price);
+        sellerUI.add(priceIn);
+        sellerUI.add(device_Type);
+        sellerUI.add(typeIn);
+        sellerUI.add(device_Storage);
+        sellerUI.add(storageIn);
 
             // Camera
-        UI_seller.add(camera_FocLen);
-        UI_seller.add(focLenIn);
+        sellerUI.add(camera_FocLen);
+        sellerUI.add(focLenIn);
 
             // Handheld
-        UI_seller.add(handheld_screen);
-        UI_seller.add(screenIn);
+        sellerUI.add(handheld_screen);
+        sellerUI.add(screenIn);
 
             // Computer
-        UI_seller.add(computer_cpu);
-        UI_seller.add(cpuIn);
-        UI_seller.add(computer_gpu);
-        UI_seller.add(gpuIn);
-        UI_seller.add(computer_ram);
-        UI_seller.add(ramIn);
-        UI_seller.add(computer_opSys);
-        UI_seller.add(opSysIn);
+        sellerUI.add(computer_cpu);
+        sellerUI.add(cpuIn);
+        sellerUI.add(computer_gpu);
+        sellerUI.add(gpuIn);
+        sellerUI.add(computer_ram);
+        sellerUI.add(ramIn);
+        sellerUI.add(computer_opSys);
+        sellerUI.add(opSysIn);
 
             // Radio Buttons
-        UI_seller.add(radioLabel_hand);
-        UI_seller.add(isHandheld);
-        UI_seller.add(radioLabel_cam);
-        UI_seller.add(isCamera);
-        UI_seller.add(radioLabel_comp);
-        UI_seller.add(isComputer);
+        sellerUI.add(radioLabel_hand);
+        sellerUI.add(isHandheld);
+        sellerUI.add(radioLabel_cam);
+        sellerUI.add(isCamera);
+        sellerUI.add(radioLabel_comp);
+        sellerUI.add(isComputer);
 
             // Buttons
-        UI_seller.add(exitSession);
-        UI_seller.add(deviceAdd);
+        sellerUI.add(exitSession);
+        sellerUI.add(deviceAdd);
 
-        UI_seller.setLayout(null);
-        UI_seller.setLocationRelativeTo(null);
-        UI_seller.setVisible(true);
+        sellerUI.setLayout(null);
+        sellerUI.setLocationRelativeTo(null);
+        sellerUI.setVisible(true);
 
-        UI_seller.addWindowListener(new WindowAdapter() {
+        sellerUI.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                UI_seller.dispose();
+                sellerUI.dispose();
             }
         });
 
         exitSession.addActionListener(e -> {
-            UI_seller.dispose();
+            sellerUI.dispose();
             new storeMainWindow();
         });
 
@@ -194,12 +194,12 @@ public class storeSellerWindow extends JPanel {
                                                           + ", FALSE, NULL);");
                             camInsert.executeUpdate();
 
-                            JOptionPane.showMessageDialog(UI_seller, "Camera successfully added.");
+                            JOptionPane.showMessageDialog(sellerUI, "Camera successfully added.");
                         } catch (SQLException ex) {
                             System.out.println("Error whilst adding camera:\n" + ex);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(UI_seller, "Enter camera info");
+                        JOptionPane.showMessageDialog(sellerUI, "Enter camera info");
                     }
                 } else if(isHandheld.isSelected()) {
                     if(!(screenIn.toString().equals("") || storageIn.toString().equals(""))) {
@@ -210,12 +210,12 @@ public class storeSellerWindow extends JPanel {
                                                                storeMainWindow.user_id + ", FALSE, NULL);");
                             handHeldInsert.executeUpdate();
 
-                            JOptionPane.showMessageDialog(UI_seller, "Handheld device successfully added.");
+                            JOptionPane.showMessageDialog(sellerUI, "Handheld device successfully added.");
                         } catch (SQLException ex) {
                             System.out.println("Error whilst adding Handheld: \n" + ex);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(UI_seller, "Enter Handheld information");
+                        JOptionPane.showMessageDialog(sellerUI, "Enter Handheld information");
                     }
                 } else if(isComputer.isSelected()) {
                     if(!(cpuIn.toString().equals("") || gpuIn.toString().equals("") || opSysIn.toString().equals("") || ramIn.toString().equals("") || storageIn.toString().equals("")))  {
@@ -227,16 +227,16 @@ public class storeSellerWindow extends JPanel {
                                     + storeMainWindow.user_id + ", FALSE, NULL);");
                             computerInsert.executeUpdate();
 
-                            JOptionPane.showMessageDialog(UI_seller, "Computer added successfully.");
+                            JOptionPane.showMessageDialog(sellerUI, "Computer added successfully.");
                         } catch (SQLException ex) {
                             System.out.println("Error whilst adding computer: \n" + ex);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(UI_seller, "Complete computer information");
+                        JOptionPane.showMessageDialog(sellerUI, "Complete computer information");
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(UI_seller, "Please fill in the basic information.");
+                JOptionPane.showMessageDialog(sellerUI, "Please fill in the basic information.");
             }
         });
     }
